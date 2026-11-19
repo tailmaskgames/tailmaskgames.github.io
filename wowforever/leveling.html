@@ -286,6 +286,12 @@ footer{margin-top:50px;padding-top:18px;border-top:1px solid var(--line);font-si
 .zsub span{font-weight:500;font-size:12px;color:var(--muted)}
 .qlist>.zsub:first-child{margin-top:8px}
 details.skipd{margin-top:4px}
+.stepno{display:inline-block;font:700 11px var(--mono);color:var(--cls,var(--gold2));border:1px solid var(--cls,var(--gold));border-radius:6px;padding:1px 6px;margin-right:6px;vertical-align:1px}
+.stepno.nx{background:var(--cls,var(--gold));color:var(--bg)}
+.zsub.cls{color:var(--cls,var(--gold2));background:color-mix(in srgb,var(--cls,var(--gold)) 14%,transparent)}
+.chh{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--ink2);padding:6px 4px 2px}
+.chlink{border:0;background:none;color:var(--cls,var(--gold2));font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap}
+.chblk{border-top:0}
 .clsintro{border:1px solid var(--cls,var(--gold));background:color-mix(in srgb,var(--cls,var(--gold)) 10%,var(--panel));border-radius:14px;padding:12px 14px;margin:0 0 14px;font-size:14px;color:var(--ink2)}
 .clsintro b{display:block;font:800 17px var(--serif);color:var(--ink);margin-bottom:3px}
 .step.chain.done{opacity:.55}
@@ -441,8 +447,8 @@ function row(q) {
   const extra = [q.share ? "可分享" : "", q.elite ? "精英" : "", q.dg ? "副本任務" : ""].filter(Boolean).join("・");
   return `<div class="qr${done[q.id] ? " done" : ""}${st.lv && q.lv < st.lv - 3 ? " low" : ""}">
     <input type="checkbox" data-q="${q.id}" ${done[q.id] ? "checked" : ""} aria-label="完成 ${esc(q.zh)}">
-    <span class="ql" style="color:${lvColor(q.lv)}">${q.lv}</span>
-    <div class="qm"><button type="button" class="qn" data-qd="${q.id}">${esc(q.zh || q.en)}</button><span class="tags"><span class="tag ${t[0]}">${t[1]}</span>${q.isnew ? `<span class="tag new">✦ 永恆</span>` : ""}</span>
+    <span class="ql" style="color:${lvColor(q.lv)}" title="${q.lvi ? "資料庫沒有等級，依任務線前後推估" : ""}">${q.lv == null ? "?" : (q.lvi ? "≈" : "") + q.lv}</span>
+    <div class="qm">${q._step ? `<span class="stepno${q._next ? " nx" : ""}">${q._next ? "▶ 下一步・" : ""}第 ${q._step} 步</span>` : ""}<button type="button" class="qn" data-qd="${q.id}">${esc(q.zh || q.en)}</button><span class="tags"><span class="tag ${t[0]}">${t[1]}</span>${q.isnew ? `<span class="tag new">✦ 永恆</span>` : ""}</span>
       <div class="qd">${where}${q.min && q.min < q.lv ? `${where ? " · " : ""}${q.min} 級可接` : ""}${extra ? " · " + extra : ""}${q.why ? `<br>${esc(q.why)}` : ""}${gearLine || best ? `<br>${gearLine}${best}` : ""}</div>
     </div>
     <div class="qv${q.tag === "skip" ? " low" : ""}">${money(q.value)}<small>經驗 ${Number(q.xp || 0).toLocaleString()}</small></div>
@@ -458,9 +464,13 @@ function zoneGroups(list) {
 }
 function stepCard(s) {
   const qs = stepIds(s).map(id => R.quests[id]).filter(Boolean);
-  const shown = qs.filter(vis);
+  const CM = chainMap();
+  const shown0 = qs.filter(vis);
+  const chq = shown0.filter(q => CM[q.id]).map(q => Object.assign({}, q, { _step: `${CM[q.id].n}/${CM[q.id].N}`, _next: CM[q.id].next, _ci: CM[q.id].ci, _n: CM[q.id].n })).sort((a, b) => a._ci - b._ci || a._n - b._n);
+  const shown = shown0.filter(q => !CM[q.id]);
   const main = shown.filter(q => q.tag !== "skip"), skip = shown.filter(q => q.tag === "skip");
-  if (st.q && !shown.length) return "";
+  const chBlock = chq.length ? `<div class="qlist chblk"><div class="zsub cls">⚑ 職業任務線（照步驟順序做）<span>${chq.length} 個任務</span></div>${[...new Set(chq.map(q => q._ci))].map(ci => { const g = chq.filter(q => q._ci === ci); const c = R.chains[ci]; return `<div class="chh">${esc(chainTitle(c))}<button type="button" class="chlink" data-ch="${ci}">看整條任務線 →</button></div>` + g.map(row).join(""); }).join("")}</div>` : "";
+  if (st.q && !shown0.length) return "";
   const cnt = t => qs.filter(q => q.tag === t).length;
   const gold = qs.filter(q => q.tag !== "skip").reduce((a, q) => a + (q.value || 0), 0);
   const tips = (s.tips || []).map(t => `<li class="${t.k || ""}">${esc(t.t)}</li>`).join("");
@@ -470,6 +480,7 @@ function stepCard(s) {
       <div class="tt"><h3>${esc(s.zone_zh)}<i>${esc(s.zone_en || "")}</i></h3><div class="hubs">${esc(s.hubs || "")}</div>
         <div class="sum"><span>必做 <b>${cnt("gear") + cnt("pre") + cnt("cls")}</b></span><span>建議（錢）<b>${cnt("gold")}</b></span><span>可略過 <b>${cnt("skip")}</b></span>${gold ? `<span>必做＋建議約 <b>${money(gold)}</b></span>` : ""}</div></div></div>
     ${tips ? `<ul class="tips">${tips}</ul>` : ""}
+    ${chBlock}
     ${main.length ? `<div class="qlist">${zoneGroups(main)}</div>` : ""}
     ${skip.length && st.view !== "must" ? (st.view === "all" ? `<div class="qlist">${zoneGroups(skip)}</div>` : `<details class="skipd"><summary>可略過 ${skip.length} 個（金錢＋賣價低於該等級平均，只有經驗）</summary><div class="qlist">${zoneGroups(skip)}</div></details>`) : ""}
   </section>`;
@@ -488,21 +499,29 @@ function dgCard(s) {
     <a class="dglink" href="dungeons.html#${esc(s.dg)}">→ 副本任務圖鑑看完整前置與攻略</a>
   </section>`;
 }
+function chainList() { return (R.chains || []).map((c, ci) => ({ c, ci, ids: c.qr ? (c.qr[st.race] || []) : c.ids })).filter(x => x.ids.length); }
+function chainMap() {
+  const m = {};
+  for (const x of chainList()) { const nx = x.ids.find(id => !done[id]); x.ids.forEach((id, k) => { m[id] = { ci: x.ci, n: k + 1, N: x.ids.length, c: x.c, next: id === nx }; }); }
+  return m;
+}
+const chainTitle = c => c.t0 && c.t0 !== c.t ? `${c.t0} → ${c.t}` : c.t;
 function chainsView() {
-  const ch = R.chains.map(c => ({ c, ids: c.qr ? (c.qr[st.race] || []) : c.ids })).filter(x => x.ids.length);
   const L = st.lv;
   const lvTxt = c => c.lv == null ? "等級未知" : c.lv2 && c.lv2 !== c.lv ? `Lv ${c.lv}–${c.lv2}` : `Lv ${c.lv}`;
-  const body = ch.map(({ c, ids }) => {
-    const qs = ids.map(id => R.quests[id]).filter(Boolean).filter(q => !(st.hide && done[q.id]) && (!st.q || norm([q.zh, q.en, q.giver, q.where].join(" ")).includes(st.q)));
+  const body = chainList().map(({ c, ci, ids }) => {
+    const nx = ids.find(id => !done[id]);
+    const qs = ids.map((id, k) => R.quests[id] && Object.assign({}, R.quests[id], { _step: `${k + 1}/${ids.length}`, _next: id === nx })).filter(Boolean)
+      .filter(q => !(st.hide && done[q.id]) && (!st.q || norm([q.zh, q.en, q.giver, q.where].join(" ")).includes(st.q)));
     if (!qs.length) return "";
-    const fin = ids.every(id => done[id]);
+    const fin = !nx, doneN = ids.filter(id => done[id]).length;
     const cur = L && c.lv != null && c.lv <= L && L <= (c.lv2 || c.lv) + 2;
-    return `<section class="step chain${cur ? " cur" : ""}${fin ? " done" : ""}" style="--sc:${c.lv ? lvColor(c.lv) : "var(--muted)"}">
-      <div class="step-h"><span class="lvb">${lvTxt(c)}</span><div class="tt"><h3>${esc(c.t)}<i>${ids.length} 個任務${fin ? " · 已完成" : ""}</i></h3>
-      ${c.rw && c.rw.length ? `<div class="hubs">獎勵：${c.rw.map(esc).join("、")}</div>` : ""}${c.qr ? `<div class="hubs">${esc(R.races[st.race].zh)}專屬的版本</div>` : ""}</div></div>
-      <div class="qlist">${qs.map(q => row(Object.assign({}, q, { lv: q.lv ?? "?" }))).join("")}</div></section>`;
+    return `<section class="step chain${cur ? " cur" : ""}${fin ? " done" : ""}" id="ch-${ci}" style="--sc:${c.lv ? lvColor(c.lv) : "var(--muted)"}">
+      <div class="step-h"><span class="lvb">${lvTxt(c)}</span><div class="tt"><h3>${esc(chainTitle(c))}<i>${ids.length} 步${doneN ? `・已完成 ${doneN}` : ""}</i></h3>
+      ${c.cont ? `<div class="hubs">⤷ 接續上一條任務線</div>` : ""}${c.rw && c.rw.length ? `<div class="hubs">獎勵：${c.rw.map(esc).join("、")}</div>` : ""}${c.qr ? `<div class="hubs">${esc(R.races[st.race].zh)}的版本</div>` : ""}</div></div>
+      <div class="qlist">${qs.map(row).join("")}</div></section>`;
   }).join("");
-  return `<div class="clsintro"><b>${esc(R.name)}職業任務（${esc(R.races[st.race].zh)}）</b>職業任務會給技能、寵物、坐騎或專屬裝備，所有${esc(R.name)}都必須自己去解。依等級排成一條條任務線，點任務名稱可以看接任務、交任務的地點與目標；勾選會和練級路線共用。少數永恆新增任務資料庫還沒有等級，排在最後。</div>` + (body || `<div class="empty">沒有符合條件的職業任務。</div>`);
+  return `<div class="clsintro"><b>${esc(R.name)}職業任務（${esc(R.races[st.race].zh)}）</b>職業任務會給技能、寵物、坐騎或專屬裝備，所有${esc(R.name)}都必須自己去解。每條任務線照「第 1 步 → 第 2 步 …」的順序做，▶ 標的是你下一個要做的任務（依你的勾選）。等級前面有「≈」表示資料庫沒有等級，依前後任務推估。點任務名稱可以看接任務、交任務的地點與目標。</div>` + (body || `<div class="empty">沒有符合條件的職業任務。</div>`);
 }
 function render() {
   const steps = R.steps.filter(s => !s.race || s.race === st.race);
@@ -603,6 +622,7 @@ addEventListener("keydown", e => { if (e.key === "Escape") hideQuest(); });
 document.addEventListener("click", e => { if (!qpop.hidden && !e.target.closest("#qpop") && !e.target.closest("[data-qd]")) hideQuest(); });
 document.getElementById("list").addEventListener("click", e => {
   const b = e.target.closest("[data-qd]"); if (b) { showQuest(b.dataset.qd, b); return; }
+  const cl = e.target.closest("[data-ch]"); if (cl) { st.view = "cls"; store.set("wowf-route-view", st.view); render(); const el = document.getElementById("ch-" + cl.dataset.ch); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
   const h = e.target.closest(".step.past .step-h"); if (h) h.parentElement.classList.toggle("open");
 });
 const mylv = document.getElementById("mylv");
