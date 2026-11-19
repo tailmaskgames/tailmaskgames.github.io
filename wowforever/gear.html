@@ -278,7 +278,8 @@ let done = store.get(DONE_KEY, {});
 const st = { cls: "", band: "all", prio: "all", q: "", hide: store.get("wowf-gear-hide", false), best: store.get("wowf-gear-best", true) };
 const sel = document.getElementById("pick");
 
-function clsFromHash() { const h = decodeURIComponent(location.hash.slice(1)); return CLASSES[h] ? h : Object.keys(CLASSES)[0]; }
+function navCls(c) { document.querySelectorAll('a[href]').forEach(a => { const h = a.getAttribute("href"), b = h.split("#")[0]; if (/^(leveling|gear|talents)\.html$/.test(b)) a.setAttribute("href", b + (c ? "#" + c : "")); }); }
+function clsFromHash() { const h = decodeURIComponent(location.hash.slice(1)).split("/")[0]; const m = store.get("wowf-class", ""); return CLASSES[h] ? h : CLASSES[m] ? m : Object.keys(CLASSES)[0]; }
 const key = it => st.cls + ":" + (it.wh_id || it.item_zh);
 const prioTag = p => p === "必拿" ? "must" : p === "推薦" ? "rec" : "opt";
 function dgLink(name) {
@@ -418,7 +419,7 @@ function render() {
   document.getElementById("foot").innerHTML = `「最佳路線」的比法：同部位的裝備，以任務等級當取得時間，用職業權重算分（${C.data.weights_zh ? esc(C.data.weights_zh) : st.cls === "mage" ? "法師：智力、法術傷害、耐力、精神；魔杖以每秒傷害為主；法杖和「單手武器＋副手」分開比，兩者之間沒有互相比較" : "聖騎士：力量、耐力、攻擊強度、致命一擊、法術傷害；武器以每秒傷害為主"}）。5 級內有明顯更好的同部位任務裝備（同時或更早拿到好 3% 以上，晚拿則要好 10% 以上），就標「可略過」。戒指、飾品可戴兩個，要有兩件更好的才算。分數只是參考，特殊效果（使用效果、對特定種族加成）沒算進去。<br>副本掉落（藍裝以上）只當加分項：最佳路線只在任務裝備之間比，掉落不會讓任務裝備變成「可略過」。只列出「掉了可以取代當時正在穿的任務裝備」，或任務路線在那個部位剛好沒裝備的掉落。掉落率取自 forever.warcraftdb.com 的擊殺樣本，樣本少時誤差很大。<br>${items.some(isCraft) ? "裁縫製作也是加分項，規則和副本掉落一樣。做得出來的等級取「需要等級」和「裁縫技能 ÷ 5」較高的那個，並照訓練師等級限制（技能 75／150／225 以上要 10／20／35 級）。有些圖樣要打怪掉落或跟商人買，卡片上有標。<br>" : ""}屬性以魔獸永恆台服資料庫（Wowhead Forever 繁中）為準，資料核對日期 ${esc(C.data.forever_checked_at || "—")}。標「永恆新增」的是經典版沒有的任務或獎勵。勾選「已取得」只存在這台裝置的瀏覽器裡。<br>來源：${(C.data.sources || []).slice(0, 6).map(u => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u.replace(/^https?:\/\/(www\.)?/, "").slice(0, 42))}</a>`).join("、")}`;
 }
 sel.innerHTML = Object.entries(CLASSES).map(([k, c]) => `<option value="${k}">${esc(c.name_zh)}${c.pending ? "（整理中）" : ""}</option>`).join("");
-function fromHash() { st.cls = clsFromHash(); sel.value = st.cls; render(); }
+function fromHash() { st.cls = clsFromHash(); sel.value = st.cls; store.set("wowf-class", st.cls); navCls(st.cls); if (location.hash.slice(1) !== st.cls) history.replaceState(null, "", "#" + st.cls); render(); }
 sel.addEventListener("change", () => { location.hash = sel.value; });
 addEventListener("hashchange", () => { fromHash(); scrollTo({ top: 0 }); });
 document.getElementById("rail").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; st.band = st.band === b.dataset.b ? "all" : b.dataset.b; render(); });

@@ -376,6 +376,9 @@ const hide = document.getElementById("hide"); hide.checked = st.hide;
 hide.addEventListener("change", () => { st.hide = hide.checked; store.set("wowf-dg-hide", st.hide); render(); });
 document.getElementById("main").addEventListener("change", e => { const t = e.target.closest(".tick"); if (!t) return; if (t.checked) done[t.dataset.k] = 1; else delete done[t.dataset.k]; store.set(DONE_KEY, done); render(); });
 fromHash();
+
+function navCls(c) { document.querySelectorAll('a[href]').forEach(a => { const h = a.getAttribute("href"), b = h.split("#")[0]; if (/^(leveling|gear|talents)\.html$/.test(b)) a.setAttribute("href", b + (c ? "#" + c : "")); }); }
+navCls(store.get("wowf-class", ""));
 </script>
 </body>
 </html>

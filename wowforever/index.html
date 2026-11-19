@@ -254,4 +254,7 @@ const norm = s => String(s || "").toLowerCase();
   btn.addEventListener("click", () => { const now = (document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark")) === "dark" ? "light" : "dark"; document.documentElement.dataset.theme = now; store.set("wowf-theme", now); paint(); });
   paint();
 })();
+
+function navCls(c) { document.querySelectorAll('a[href]').forEach(a => { const h = a.getAttribute("href"), b = h.split("#")[0]; if (/^(leveling|gear|talents)\.html$/.test(b)) a.setAttribute("href", b + (c ? "#" + c : "")); }); }
+navCls(store.get("wowf-class", ""));
 </script></body></html>

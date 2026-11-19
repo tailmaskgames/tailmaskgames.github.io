@@ -493,9 +493,12 @@ document.getElementById("sumbar").addEventListener("click", e => {
 });
 const sel = document.getElementById("pick");
 sel.innerHTML = Object.entries(CLS).map(([k, c]) => `<option value="${k}">${esc(c.zh)}</option>`).join("");
+function navCls(c) { document.querySelectorAll('a[href]').forEach(a => { const h = a.getAttribute("href"), b = h.split("#")[0]; if (/^(leveling|gear|talents)\.html$/.test(b)) a.setAttribute("href", b + (c ? "#" + c : "")); }); }
 function fromHash() {
   const [c, a, b] = decodeURIComponent(location.hash.slice(1)).split("/");
-  setClass(TAL[c] ? c : Object.keys(CLS)[0]); sel.value = cls; tab = 0;
+  const mem = store.get("wowf-class", "");
+  setClass(TAL[c] ? c : TAL[mem] ? mem : Object.keys(CLS)[0]); sel.value = cls; tab = 0;
+  store.set("wowf-class", cls); navCls(cls);
   if (a && a[0] === "b") { const B = BUILDS[cls] || {}; const k = a.slice(1); const src = k === "L" ? B.leveling : B.endgame && B.endgame[+k.slice(1)]; if (src) { build = Object.assign({ key: k }, src); playLv = Math.max(10, Math.min(60, +b || 60)); ranks = buildRanks(build, playLv); } }
   else if (a) ranks = decode(a);
   render();

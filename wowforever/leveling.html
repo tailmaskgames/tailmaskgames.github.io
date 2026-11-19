@@ -587,9 +587,13 @@ document.getElementById("nowbar").addEventListener("click", e => {
 });
 const sel = document.getElementById("pick");
 
+function navCls(c) { document.querySelectorAll('a[href]').forEach(a => { const h = a.getAttribute("href"), b = h.split("#")[0]; if (/^(leveling|gear|talents)\.html$/.test(b)) a.setAttribute("href", b + (c ? "#" + c : "")); }); }
 function fromHash() {
   const h = decodeURIComponent(location.hash.slice(1)).split("/")[0];
-  st.cls = DATA.classes[h] ? h : Object.keys(DATA.classes)[0]; sel.value = st.cls; loadClass(st.cls);
+  const mem = store.get("wowf-class", "");
+  st.cls = DATA.classes[h] ? h : DATA.classes[mem] ? mem : Object.keys(DATA.classes)[0]; sel.value = st.cls; loadClass(st.cls);
+  store.set("wowf-class", st.cls); navCls(st.cls);
+  if (!DATA.classes[h] && !h) history.replaceState(null, "", "#" + st.cls);
   st.race = store.get("wowf-route-race-" + st.cls, Object.keys(R.races)[0]);
   if (!R.races[st.race]) st.race = Object.keys(R.races)[0];
   render();
