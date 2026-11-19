@@ -275,7 +275,7 @@ const isCraft = it => it.source === "craft";
 const isBonus = it => isDrop(it) || isCraft(it);
 const DONE_KEY = "wowf-gear-done-v1";
 let done = store.get(DONE_KEY, {});
-const st = { cls: "", band: "all", prio: "all", q: "", hide: store.get("wowf-gear-hide", false), best: store.get("wowf-gear-best", true) };
+const st = { cls: "", band: store.get("wowf-gear-band", "all"), prio: store.get("wowf-gear-prio", "all"), q: "", hide: store.get("wowf-gear-hide", false), best: store.get("wowf-gear-best", true) };
 const sel = document.getElementById("pick");
 
 function navCls(c) { document.querySelectorAll('a[href]').forEach(a => { const h = a.getAttribute("href"), b = h.split("#")[0]; if (/^(leveling|gear|talents)\.html$/.test(b)) a.setAttribute("href", b + (c ? "#" + c : "")); }); }
@@ -384,6 +384,8 @@ function render() {
     return;
   }
   const items = C.data.items || [];
+  if (!PRIO.some(([v]) => v === st.prio) || (st.prio === "craft" && !items.some(isCraft))) st.prio = "all";
+  if (st.band !== "all" && !BANDS.includes(st.band)) st.band = "all";
   document.documentElement.style.setProperty("--accent", C.color);
   document.title = C.name_zh + "任務裝備 · 魔獸永恆部落";
   const got = items.filter(it => done[key(it)]).length;
@@ -422,8 +424,8 @@ sel.innerHTML = Object.entries(CLASSES).map(([k, c]) => `<option value="${k}">${
 function fromHash() { st.cls = clsFromHash(); sel.value = st.cls; store.set("wowf-class", st.cls); navCls(st.cls); if (location.hash.slice(1) !== st.cls) history.replaceState(null, "", "#" + st.cls); render(); }
 sel.addEventListener("change", () => { location.hash = sel.value; });
 addEventListener("hashchange", () => { fromHash(); scrollTo({ top: 0 }); });
-document.getElementById("rail").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; st.band = st.band === b.dataset.b ? "all" : b.dataset.b; render(); });
-document.getElementById("prio").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; st.prio = b.dataset.p; render(); });
+document.getElementById("rail").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; st.band = st.band === b.dataset.b ? "all" : b.dataset.b; store.set("wowf-gear-band", st.band); render(); });
+document.getElementById("prio").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; st.prio = b.dataset.p; store.set("wowf-gear-prio", st.prio); render(); });
 document.getElementById("q").addEventListener("input", e => { st.q = norm(e.target.value.trim()); render(); });
 const best = document.getElementById("best"); best.checked = st.best;
 best.addEventListener("change", () => { st.best = best.checked; store.set("wowf-gear-best", st.best); render(); });

@@ -371,6 +371,7 @@ details.skipd[open]>summary::before{content:"▾ "}
     <label class="mylv">我的等級 <input id="mylv" type="number" min="1" max="60" inputmode="numeric" placeholder="—"></label>
     <input class="search" id="q" type="search" placeholder="搜尋任務、NPC、地區、獎勵…" aria-label="搜尋">
     <label class="check"><input type="checkbox" id="hide"> 隱藏已完成</label>
+    <label class="check" title="輸入等級後，隱藏已經過了的階段、副本，以及比你低 3 級以上的任務"><input type="checkbox" id="lowhide"> 隱藏低等級</label>
   </div>
   <div id="nowbar"></div>
   <main class="timeline" id="list"><div class="empty">載入練級資料中…</div></main>
@@ -407,7 +408,7 @@ const BAND_C = ["#7fc97f", "#5fbf6a", "#b8c95a", "#e0b25b", "#e8843a", "#e2552b"
 const lvColor = v => BAND_C[Math.min(5, Math.floor((v - 1) / 10))];
 const DONE_KEY = "wowf-route-done-v1";
 let done = store.get(DONE_KEY, {});
-const st = { cls: "", race: store.get("wowf-route-race", "undead"), view: store.get("wowf-route-view", "main"), q: "", hide: store.get("wowf-route-hide", false) };
+const st = { cls: "", lowhide: store.get("wowf-route-lowhide", true), race: store.get("wowf-race", "undead"), view: store.get("wowf-route-view", "main"), q: "", hide: store.get("wowf-route-hide", false) };
 const VIEWS = [["main", "必做＋建議"], ["must", "只看必做"], ["all", "全部任務"]];
 const TAGS = { gear: ["must", "必做・裝備"], pre: ["pre", "必做・前置"], cls: ["cls", "法師職業"], gold: ["gold", "建議做・錢"], skip: ["skipt", "可略過"] };
 const money = c => {
@@ -418,6 +419,7 @@ const money = c => {
 const qhref = q => `https://www.wowhead.com/forever/tw/quest=${q.id}`;
 const ihref = id => `https://www.wowhead.com/forever/tw/item=${id}`;
 function vis(q) {
+  if (st.lv && st.lowhide && q.lv < st.lv - 3) return false;
   if (st.hide && done[q.id]) return false;
   if (st.view === "must" && !["gear", "pre", "cls"].includes(q.tag)) return false;
   if (st.q) {
@@ -513,6 +515,7 @@ function render() {
   let html = "", bi = 0;
   for (const s of steps) {
     while (bi < BANDS.length && s.lv[0] >= BANDS[bi][0]) { html += `<div class="band-anchor" id="band-${BANDS[bi][0]}"></div>`; bi++; }
+    if (st.lv && st.lowhide && s.lv[1] < st.lv - 1) continue;
     html += s.dg ? dgCard(s) : stepCard(s);
   }
   while (bi < BANDS.length) { html += `<div class="band-anchor" id="band-${BANDS[bi][0]}"></div>`; bi++; }
@@ -530,9 +533,11 @@ function render() {
     <br>資料：任務等級、金錢、經驗、獎勵取自 forever.warcraftdb.com（永恆資料庫）與 classicdb.ch（經典版補缺），繁中名稱與物品賣價取自 Wowhead 永恆台服資料庫，區域等級與新地圖資訊參考 Warcraft Tavern 永恆指南。資料核對日期 ${esc(R.meta.checked_at)}。勾選只存在這台裝置的瀏覽器。<br>來源：${R.meta.sources.map(u => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u.replace(/^https?:\/\/(www\.)?/, "").slice(0, 46))}</a>`).join("、")}`;
 }
 document.getElementById("lvrail").addEventListener("click", e => { const a = e.target.closest("a[href^='#band-']"); if (!a) return; e.preventDefault(); const el = document.getElementById(a.getAttribute("href").slice(1)); if (el) el.scrollIntoView({ behavior: "smooth" }); });
-document.getElementById("race").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; st.race = b.dataset.r; store.set("wowf-route-race-" + st.cls, st.race); render(); });
+document.getElementById("race").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; st.race = b.dataset.r; store.set("wowf-route-race-" + st.cls, st.race); store.set("wowf-race", st.race); render(); });
 document.getElementById("view").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; st.view = b.dataset.v; store.set("wowf-route-view", st.view); render(); });
 document.getElementById("q").addEventListener("input", e => { st.q = norm(e.target.value.trim()); render(); });
+const lowhide = document.getElementById("lowhide"); lowhide.checked = st.lowhide;
+lowhide.addEventListener("change", () => { st.lowhide = lowhide.checked; store.set("wowf-route-lowhide", st.lowhide); render(); });
 const hide = document.getElementById("hide"); hide.checked = st.hide;
 hide.addEventListener("change", () => { st.hide = hide.checked; store.set("wowf-route-hide", st.hide); render(); });
 document.getElementById("list").addEventListener("change", e => { const t = e.target.closest("input[data-q]"); if (!t) return; if (t.checked) done[t.dataset.q] = 1; else delete done[t.dataset.q]; store.set(DONE_KEY, done); render(); });
@@ -594,7 +599,8 @@ function fromHash() {
   st.cls = DATA.classes[h] ? h : DATA.classes[mem] ? mem : Object.keys(DATA.classes)[0]; sel.value = st.cls; loadClass(st.cls);
   store.set("wowf-class", st.cls); navCls(st.cls);
   if (!DATA.classes[h] && !h) history.replaceState(null, "", "#" + st.cls);
-  st.race = store.get("wowf-route-race-" + st.cls, Object.keys(R.races)[0]);
+  const gr = store.get("wowf-race", "");
+  st.race = store.get("wowf-route-race-" + st.cls, R.races[gr] ? gr : Object.keys(R.races)[0]);
   if (!R.races[st.race]) st.race = Object.keys(R.races)[0];
   render();
 }
