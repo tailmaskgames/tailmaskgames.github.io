@@ -474,12 +474,13 @@ function stepCard(s) {
   const cnt = t => qs.filter(q => q.tag === t).length;
   const gold = qs.filter(q => q.tag !== "skip").reduce((a, q) => a + (q.value || 0), 0);
   const tips = (s.tips || []).map(t => `<li class="${t.k || ""}">${esc(t.t)}</li>`).join("");
+  const bagTip = ["c1", "c3"].includes(s.id) ? `<li class="train">14 級起可以開始「舒適的睡袋」任務線（躺睡袋經驗 +3%），第一步就在貧瘠之地南部 46, 74：<a href="sleeping-bag.html">看睡袋任務線攻略 →</a></li>` : "";
   const L = st.lv, cur = L && s.lv[0] <= L && L <= s.lv[1], past = L && s.lv[1] < L - 1;
   return `<section class="step${s.city ? " city" : ""}${cur ? " cur" : ""}${past ? " past" : ""}" id="s-${esc(s.id)}" style="--sc:${lvColor(s.lv[0])}">
     <div class="step-h"><span class="lvb">Lv ${s.lv[0]}${s.lv[1] !== s.lv[0] ? "–" + s.lv[1] : ""}</span>
       <div class="tt"><h3>${esc(s.zone_zh)}<i>${esc(s.zone_en || "")}</i></h3><div class="hubs">${esc(s.hubs || "")}</div>
         <div class="sum"><span>必做 <b>${cnt("gear") + cnt("pre") + cnt("cls")}</b></span><span>建議（錢）<b>${cnt("gold")}</b></span><span>可略過 <b>${cnt("skip")}</b></span>${gold ? `<span>必做＋建議約 <b>${money(gold)}</b></span>` : ""}</div></div></div>
-    ${tips ? `<ul class="tips">${tips}</ul>` : ""}
+    ${tips || bagTip ? `<ul class="tips">${tips}${bagTip}</ul>` : ""}
     ${chBlock}
     ${main.length ? `<div class="qlist">${zoneGroups(main)}</div>` : ""}
     ${skip.length && st.view !== "must" ? (st.view === "all" ? `<div class="qlist">${zoneGroups(skip)}</div>` : `<details class="skipd"><summary>可略過 ${skip.length} 個（金錢＋賣價低於該等級平均，只有經驗）</summary><div class="qlist">${zoneGroups(skip)}</div></details>`) : ""}

@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>舒適的睡袋任務線 · 魔獸永恆部落</title>
+<meta name="description" content="魔獸永恆部落「舒適的睡袋」任務線攻略：貧瘠之地 → 西部荒野 → 石爪山脈 → 洛克莫丹 → 索拉丁之牆，6 個任務的地點、座標、獎勵與跑圖路線。">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>:root{
+  --bg:#0d0907; --bg2:#15100c; --panel:#1b1410; --panel2:#231a14; --line:#3a2a1f; --line2:#56402e;
+  --ink:#eee3cf; --ink2:#c9b99e; --muted:#8f7d66;
+  --gold:#e0b25b; --gold2:#f4d48f; --ember:#e2552b; --blood:#a8231a; --blood2:#d43b2a;
+  --q0:#9d9d9d; --q1:#f2f2f2; --q2:#1eff00; --q3:#3c95ff; --q4:#b465ff; --q5:#ff8000;
+  --green:#4fd36b; --cls:#69ccf0; --new:#ffb627;
+  --lv-lo:#5fbf6a; --lv-mid:#e0b25b; --lv-hi:#e2552b;
+  --shadow:0 18px 40px -18px rgba(0,0,0,.8);
+  --serif:"Noto Serif TC","Songti TC",serif; --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --disp:"Cinzel","Noto Serif TC",serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#efe5d2; --bg2:#e6d9c1; --panel:#fbf5ea; --panel2:#f3e9d7; --line:#d8c7a8; --line2:#c1a97f;
+  --ink:#2a1c12; --ink2:#4d3a2a; --muted:#806a52;
+  --gold:#9a6a12; --gold2:#7a520a; --ember:#c0431d; --blood:#9a1f17; --blood2:#b5281c;
+  --q0:#777; --q1:#3a3a3a; --q2:#178a00; --q3:#0b5fd1; --q4:#7d2fc9; --q5:#c45f00;
+  --green:#1d8a3a; --new:#b36b00; --shadow:0 14px 30px -18px rgba(70,40,10,.45); color-scheme:light;
+}}
+:root[data-theme="light"]{
+  --bg:#efe5d2; --bg2:#e6d9c1; --panel:#fbf5ea; --panel2:#f3e9d7; --line:#d8c7a8; --line2:#c1a97f;
+  --ink:#2a1c12; --ink2:#4d3a2a; --muted:#806a52;
+  --gold:#9a6a12; --gold2:#7a520a; --ember:#c0431d; --blood:#9a1f17; --blood2:#b5281c;
+  --q0:#777; --q1:#3a3a3a; --q2:#178a00; --q3:#0b5fd1; --q4:#7d2fc9; --q5:#c45f00;
+  --green:#1d8a3a; --new:#b36b00; --shadow:0 14px 30px -18px rgba(70,40,10,.45); color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 var(--sans);overflow-x:hidden;
+  background-image:
+    radial-gradient(1200px 520px at 50% -180px, color-mix(in srgb,var(--blood) 38%,transparent), transparent 70%),
+    radial-gradient(700px 400px at 100% 0, color-mix(in srgb,var(--ember) 14%,transparent), transparent 70%),
+    linear-gradient(var(--bg),var(--bg2));
+  background-attachment:fixed;}
+a{color:var(--gold2)}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* top bar */
+.topbar{position:sticky;top:0;z-index:30;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  background:color-mix(in srgb,var(--bg) 82%,transparent);border-bottom:1px solid var(--line)}
+.topbar .in{max-width:1180px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);margin-right:auto}
+.brand svg{width:30px;height:30px;flex:none}
+.brand b{font:700 16px/1.1 var(--serif);letter-spacing:.06em}
+.brand small{display:block;font:600 10px/1.2 var(--disp);letter-spacing:.22em;color:var(--gold);text-transform:uppercase}
+.nav{display:flex;gap:4px;padding:3px;border:1px solid var(--line);border-radius:999px;background:var(--panel)}
+.nav a{padding:5px 14px;border-radius:999px;text-decoration:none;color:var(--ink2);font-weight:600;font-size:14px;white-space:nowrap}
+.nav a[aria-current="page"]{background:linear-gradient(180deg,var(--blood2),var(--blood));color:#fff;box-shadow:0 0 0 1px color-mix(in srgb,var(--gold) 45%,transparent) inset}
+.picker{position:relative;display:flex;align-items:center}
+.picker select{appearance:none;-webkit-appearance:none;background:var(--panel);border:1px solid var(--line2);border-radius:10px;
+  padding:7px 34px 7px 12px;font-weight:700;color:var(--ink);cursor:pointer;max-width:62vw}
+.picker::after{content:"";position:absolute;right:13px;top:50%;width:7px;height:7px;border-right:2px solid var(--gold);border-bottom:2px solid var(--gold);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.picker label{font-size:12px;color:var(--muted);margin-right:8px;white-space:nowrap}
+.theme-btn{border:1px solid var(--line);background:var(--panel);border-radius:10px;width:36px;height:36px;cursor:pointer;display:grid;place-items:center}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px 80px}
+
+/* hero */
+.hero{position:relative;margin:26px 0 22px;padding:34px 30px 28px;border-radius:22px;overflow:hidden;
+  border:1px solid var(--line2);background:
+   radial-gradient(600px 260px at 85% 10%, color-mix(in srgb,var(--accent,var(--ember)) 30%,transparent), transparent 70%),
+   linear-gradient(135deg,var(--panel2),var(--panel));box-shadow:var(--shadow)}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background:repeating-linear-gradient(115deg,transparent 0 22px,color-mix(in srgb,var(--gold) 5%,transparent) 22px 23px)}
+.hero .sig{position:absolute;right:-30px;top:-30px;width:260px;height:260px;opacity:.13;color:var(--accent,var(--gold))}
+.hero .kicker{font:600 12px/1 var(--disp);letter-spacing:.3em;color:var(--gold);text-transform:uppercase}
+.hero h1{margin:10px 0 6px;font:900 clamp(30px,5.4vw,52px)/1.08 var(--serif);letter-spacing:.04em;
+  background:linear-gradient(180deg,var(--gold2),var(--gold) 55%,var(--ember));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero h1 em{font-style:normal;color:var(--accent,var(--gold2));-webkit-text-fill-color:var(--accent,var(--gold2))}
+.hero .en{font:600 14px/1.3 var(--disp);letter-spacing:.14em;color:var(--ink2)}
+.hero p{max-width:760px;color:var(--ink2);margin:14px 0 0}
+.stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;position:relative}
+.stat{min-width:104px;padding:10px 14px;border-radius:12px;background:color-mix(in srgb,var(--bg) 55%,transparent);border:1px solid var(--line)}
+.stat b{display:block;font:800 24px/1.1 var(--serif);color:var(--gold2)}
+.stat span{font-size:12px;color:var(--muted)}
+
+/* toolbar */
+.toolbar{position:sticky;top:57px;z-index:20;display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 0;margin-bottom:10px;
+  background:linear-gradient(var(--bg) 70%,transparent)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--panel);padding:5px 12px;border-radius:999px;cursor:pointer;font-size:13px;font-weight:600;color:var(--ink2);white-space:nowrap}
+.chip[aria-pressed="true"]{border-color:var(--gold);color:var(--bg);background:linear-gradient(180deg,var(--gold2),var(--gold))}
+.chip .n{opacity:.7;font-weight:500;margin-left:4px}
+.search{flex:1 1 180px;min-width:150px;border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:7px 12px}
+.check{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink2);cursor:pointer;white-space:nowrap}
+
+/* band rail */
+.rail{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin:4px 0 18px}
+.rail button{border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:8px 6px;cursor:pointer;text-align:center;position:relative;overflow:hidden}
+.rail button b{display:block;font:800 16px/1.2 var(--serif)}
+.rail button span{font-size:11px;color:var(--muted)}
+.rail button::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--bc)}
+.rail button[aria-pressed="true"]{border-color:var(--gold);background:var(--panel2);box-shadow:0 0 0 1px var(--gold) inset}
+
+/* section headings */
+.band-h{display:flex;align-items:baseline;gap:14px;margin:34px 0 14px;scroll-margin-top:120px}
+.band-h h2{margin:0;font:900 30px/1 var(--serif);color:var(--gold2)}
+.band-h h2 small{font:600 13px var(--sans);color:var(--muted);margin-left:8px}
+.band-h::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line2),transparent)}
+.zone-h{display:flex;align-items:center;gap:8px;margin:20px 0 10px;font:700 15px var(--serif);color:var(--ink2)}
+.zone-h::before{content:"";width:8px;height:8px;transform:rotate(45deg);background:var(--ember);box-shadow:0 0 10px var(--ember)}
+.card .zone-h{margin:-2px 30px 10px 0;font-size:12.5px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.card .zone-h::before{width:6px;height:6px}
+.zone-h i{font:500 12px var(--disp);color:var(--muted);font-style:normal;letter-spacing:.1em}
+
+/* item cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:14px}
+.card{position:relative;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,var(--panel2),var(--panel));
+  padding:14px 14px 12px;box-shadow:var(--shadow);transition:transform .15s,border-color .15s;min-width:0}
+.card:hover{transform:translateY(-2px);border-color:var(--line2)}
+.card.done{opacity:.5}
+.card .top{display:flex;gap:12px;align-items:flex-start}
+.icon{flex:none;width:52px;height:52px;border-radius:10px;border:2px solid var(--qc,var(--q1));overflow:hidden;position:relative;
+  background:#000;box-shadow:0 0 14px -2px var(--qc,transparent),inset 0 0 0 1px rgba(0,0,0,.6)}
+.icon img{width:100%;height:100%;display:block;object-fit:cover}
+.icon .fb{position:absolute;inset:0;display:grid;place-items:center;font:900 20px var(--serif);color:var(--qc);background:radial-gradient(circle at 30% 25%,#3a2a1c,#120c08)}
+.icon img+ .fb{display:none}
+.nm{min-width:0;flex:1}
+.nm a.iname{font:800 17px/1.25 var(--serif);color:var(--qc,var(--ink));text-decoration:none;word-break:break-word}
+.nm a.iname:hover{text-decoration:underline}
+.nm .sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.tag{font-size:11px;font-weight:700;padding:1px 8px;border-radius:999px;border:1px solid var(--line2);color:var(--ink2);white-space:nowrap}
+.tag.must{background:linear-gradient(180deg,var(--blood2),var(--blood));border-color:transparent;color:#fff}
+.tag.rec{border-color:var(--gold);color:var(--gold2)}
+.tag.opt{color:var(--muted)}
+.tag.new{border-color:var(--new);color:var(--new)}
+.tag.dg{border-color:var(--ember);color:var(--ember);text-decoration:none}
+.tag.choice{border-style:dashed}
+.tick{position:absolute;top:12px;right:12px;width:22px;height:22px;accent-color:var(--gold);cursor:pointer}
+.statbox{margin:10px 0 0;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,#000 30%,transparent);border:1px solid var(--line);
+  font-size:13px;color:var(--green);line-height:1.55}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) .statbox{background:color-mix(in srgb,#fff 50%,transparent)}}
+:root[data-theme="light"] .statbox{background:color-mix(in srgb,#fff 50%,transparent)}
+.verdict{margin:10px 0 0;padding:7px 10px;border-radius:10px;font-size:13px;line-height:1.5}
+.verdict.keep{background:color-mix(in srgb,var(--gold) 13%,transparent);color:var(--ink);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent)}
+.verdict.keep::before{content:"✔ ";color:var(--gold2);font-weight:800}
+.verdict.skip{background:color-mix(in srgb,var(--blood) 16%,transparent);color:var(--ink2);border:1px solid color-mix(in srgb,var(--blood2) 40%,transparent)}
+.verdict.skip::before{content:"✗ ";color:var(--blood2);font-weight:800}
+.verdict b{color:var(--gold2)}
+.verdict.bonus{background:color-mix(in srgb,var(--q3) 13%,transparent);color:var(--ink);border:1px solid color-mix(in srgb,var(--q3) 40%,transparent)}
+.verdict.bonus::before{content:"💎 "}
+.card.drop{border-style:dashed;border-color:color-mix(in srgb,var(--q3) 45%,var(--line));background:radial-gradient(260px 120px at 100% 0,color-mix(in srgb,var(--q3) 14%,transparent),transparent 70%),linear-gradient(180deg,var(--panel2),var(--panel))}
+.tag.drop{border-color:var(--q3);color:var(--q3)}
+.card.skipped{opacity:.72}
+.why{margin:8px 0 0;font-size:13.5px;color:var(--ink2)}
+.qline{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;color:var(--ink2)}
+.qline .qn{font-weight:800;color:var(--gold2)}
+.qline .where{color:var(--muted)}
+.chain{margin:8px 0 0;padding:0;list-style:none;counter-reset:s;position:relative}
+.chain li{position:relative;padding:0 0 8px 28px;font-size:13px;color:var(--ink2)}
+.chain li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:1px;width:19px;height:19px;border-radius:50%;
+  display:grid;place-items:center;font:700 11px var(--mono);background:var(--panel);border:1px solid var(--line2);color:var(--gold)}
+.chain li::after{content:"";position:absolute;left:9px;top:21px;bottom:2px;width:1px;background:var(--line2)}
+.chain li:last-child::after{display:none}
+.chain li.final::before{content:"★";background:linear-gradient(180deg,var(--gold2),var(--gold));color:var(--bg);border-color:transparent}
+.chain li.opt{opacity:.7}
+.chain b{color:var(--ink)}
+details.more{margin-top:6px}
+details.more summary{cursor:pointer;font-size:12.5px;color:var(--gold);list-style:none}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary::before{content:"▸ "}
+details.more[open] summary::before{content:"▾ "}
+.notes{font-size:12.5px;color:var(--muted);margin-top:6px}
+.empty{padding:40px;text-align:center;color:var(--muted);border:1px dashed var(--line2);border-radius:16px}
+
+/* dungeon pages */
+.ribbon{border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:16px 16px 10px;margin-bottom:22px;box-shadow:var(--shadow)}
+.ribbon h3{margin:0 0 10px;font:800 18px var(--serif);color:var(--gold2)}
+.rrow{display:grid;grid-template-columns:120px minmax(0,1fr);gap:10px;align-items:center;padding:3px 0;text-decoration:none;color:var(--ink)}
+.rrow:hover .rname{color:var(--gold2)}
+.rname{font-weight:700;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rtrack{position:relative;height:20px;border-radius:6px;background:repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px 10%)}
+.rbar{position:absolute;top:2px;bottom:2px;border-radius:5px;background:linear-gradient(90deg,var(--c1),var(--c2));display:flex;align-items:center;padding:0 6px;
+  font:700 11px var(--mono);color:#160d06;white-space:nowrap;min-width:38px;box-shadow:0 0 12px -3px var(--c2)}
+.rticks{display:grid;grid-template-columns:120px minmax(0,1fr);gap:10px;font:11px var(--mono);color:var(--muted)}
+.rticks div{position:relative;height:16px}
+.rticks span{position:absolute;transform:translateX(-50%)}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:12px}
+.dcard{display:block;text-decoration:none;color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:16px;position:relative;overflow:hidden;
+  background:radial-gradient(240px 120px at 100% 0,color-mix(in srgb,var(--c,var(--ember)) 22%,transparent),transparent 70%),linear-gradient(180deg,var(--panel2),var(--panel));transition:transform .15s,border-color .15s}
+.dcard:hover{transform:translateY(-3px);border-color:var(--gold)}
+.dcard .lv{font:800 13px var(--mono);color:var(--c)}
+.dcard h4{margin:4px 0 0;font:900 20px/1.2 var(--serif)}
+.dcard .den{font:600 11px var(--disp);letter-spacing:.12em;color:var(--muted)}
+.dcard .meta{display:flex;gap:10px;margin-top:10px;font-size:12px;color:var(--ink2);flex-wrap:wrap}
+.info{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px;margin-bottom:18px}
+.box{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:12px 14px;font-size:13.5px;color:var(--ink2);min-width:0}
+.box h5{margin:0 0 6px;font:700 12px var(--sans);letter-spacing:.1em;color:var(--gold)}
+.box ul{margin:0;padding-left:18px}
+.qcard{border-left:3px solid var(--cc,var(--line2))}
+.qcard h4{margin:0;font:800 17px/1.3 var(--serif);color:var(--ink);padding-right:30px}
+.qcard .qen{font:500 12px var(--disp);color:var(--muted);letter-spacing:.06em}
+.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:3px 10px;font-size:13px;margin-top:10px}
+.kv dt{color:var(--muted);white-space:nowrap}
+.kv dd{margin:0;color:var(--ink2)}
+.kv dd.rw{color:var(--green)}
+.tip{margin-top:8px;font-size:13px;padding:7px 10px;border-radius:10px;background:color-mix(in srgb,var(--gold) 10%,transparent);color:var(--ink2)}
+.tip::before{content:"提示　";font-weight:800;color:var(--gold)}
+footer{margin-top:50px;padding-top:18px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+
+@media (max-width:640px){
+  .hero{padding:24px 18px 20px;border-radius:18px}
+  .rail{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .rrow,.rticks{grid-template-columns:78px minmax(0,1fr)}
+  .rname{font-size:12px}
+  .toolbar{top:0;position:relative}
+  .topbar{position:relative}
+  .brand small{display:none}
+  .picker label{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+.card.craft{border-style:dashed;border-color:color-mix(in srgb,var(--q2) 50%,var(--line));background:radial-gradient(260px 120px at 100% 0,color-mix(in srgb,var(--q2) 13%,transparent),transparent 70%),linear-gradient(180deg,var(--panel2),var(--panel))}
+.tag.craft{border-color:var(--q2);color:var(--q2)}
+.verdict.bonus.craft{border-color:color-mix(in srgb,var(--q2) 55%,transparent)}
+.verdict.bonus.craft{background:color-mix(in srgb,var(--q2) 11%,transparent)}
+.verdict.bonus.craft::before{content:"🧵 "}
+
+.hero{--accent:#8fd3a8}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:12px;margin:0 0 18px}
+.fact{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:12px 14px;font-size:14px;color:var(--ink2)}
+.fact h3{margin:0 0 6px;font:800 16px var(--serif);color:var(--gold2)}
+.fact ul{margin:0;padding-left:18px}
+.fact b{color:var(--ink)}
+.routebar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 18px;font-weight:700;font-size:14px}
+.routebar a{text-decoration:none;color:var(--ink);border:1px solid var(--line2);background:var(--panel);border-radius:999px;padding:4px 12px}
+.routebar a.done{opacity:.5;text-decoration:line-through}
+.routebar span{color:var(--muted)}
+.steps{position:relative;padding-left:30px}
+.steps::before{content:"";position:absolute;left:12px;top:8px;bottom:8px;width:2px;background:linear-gradient(var(--green),var(--gold),var(--ember))}
+.bstep{position:relative;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,var(--panel2),var(--panel));padding:14px 16px;margin:0 0 14px;box-shadow:var(--shadow);scroll-margin-top:80px}
+.bstep.done{opacity:.6}
+.bstep .num{position:absolute;left:-31px;top:14px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font:800 13px var(--mono);background:var(--panel);border:2px solid var(--gold);color:var(--gold2)}
+.bstep.done .num{background:var(--green);border-color:var(--green);color:var(--bg)}
+.bstep h3{margin:0;font:900 19px/1.3 var(--serif);color:var(--ink);padding-right:34px}
+.bstep h3 small{font:600 12px var(--disp);color:var(--muted);letter-spacing:.06em;margin-left:6px}
+.bstep .tick{top:14px;right:14px}
+.where{margin-top:6px;font-size:14px;color:var(--ink2)}
+.where b{color:var(--gold2)}
+.coord{font:700 13px var(--mono);color:var(--gold2);border:1px solid var(--line2);border-radius:6px;padding:1px 6px;margin-left:4px;white-space:nowrap}
+.qbox{margin-top:10px;display:grid;gap:8px}
+.qb{border:1px dashed var(--line2);border-radius:12px;padding:8px 12px;font-size:13.5px;color:var(--ink2)}
+.qb .qt{font-weight:800;color:var(--ink)}
+.qb .qt i{font-style:normal;font-weight:600;font-size:12px;color:var(--muted);margin-left:6px}
+.qb .act{display:inline-block;font-size:11px;font-weight:800;border-radius:6px;padding:1px 7px;margin-right:6px}
+.act.in{background:color-mix(in srgb,var(--ember) 20%,transparent);color:var(--ember)}
+.act.out{background:color-mix(in srgb,var(--green) 20%,transparent);color:var(--green)}
+.act.opt{background:color-mix(in srgb,var(--q3) 20%,transparent);color:var(--q3)}
+.rw{color:var(--green)}
+.travel{margin-top:10px;font-size:13.5px;color:var(--ink2);background:color-mix(in srgb,var(--gold) 9%,transparent);border-radius:10px;padding:8px 12px}
+.travel::before{content:"怎麼去　";font-weight:800;color:var(--gold)}
+.warn2{margin-top:8px;font-size:13.5px;color:var(--ink2);background:color-mix(in srgb,var(--ember) 10%,transparent);border-radius:10px;padding:8px 12px}
+.warn2::before{content:"注意　";font-weight:800;color:var(--ember)}
+.plan{border:1px solid var(--gold);border-radius:16px;background:color-mix(in srgb,var(--gold) 8%,var(--panel));padding:14px 16px;margin:0 0 18px;font-size:14px;color:var(--ink2)}
+.plan h3{margin:0 0 6px;font:800 17px var(--serif);color:var(--gold2)}
+.plan ol{margin:6px 0 0;padding-left:20px}
+@media (max-width:640px){.steps{padding-left:24px}.steps::before{left:9px}.bstep .num{left:-25px;width:22px;height:22px;font-size:12px}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="in">
+  <a class="brand" href="index.html"><svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4d48f"/><stop offset="1" stop-color="#e2552b"/></linearGradient></defs><path d="M16 2 29 9v14L16 30 3 23V9z" fill="#2a120c" stroke="url(#bg)" stroke-width="1.6"/><path d="M16 8c4 4.5 5 7.5 2.6 11 3-.4 4 3.4 1 6.4-1.6 1.6-5.6 1.6-7.2 0-3-3-2-6.4.6-7.4C11.4 14.6 13.4 11.6 16 8z" fill="url(#bg)"/></svg><span><small>WoW Forever · Horde</small><b>魔獸永恆部落圖鑑</b></span></a>
+  <nav class="nav" aria-label="頁面"><a href="leveling.html">練級路線</a><a href="gear.html">職業裝備</a><a href="talents.html">天賦</a><a href="dungeons.html">副本任務</a></nav>
+  <button class="theme-btn" id="themeBtn" type="button" aria-label="切換主題">☾</button>
+</div></header>
+<div class="wrap">
+<section class="hero"><div class="kicker">WoW Forever · Horde · Quest Chain</div>
+  <h1><em>舒適的睡袋</em>　任務線</h1>
+  <div class="en">COZY SLEEPING BAG · HORDE WALKTHROUGH</div>
+  <p>躺在睡袋上每分鐘疊一層「充分休息」，最多 3 層、經驗值 +3%，還能和營地、烹飪食物的經驗加成一起疊。部落路線是 <b>貧瘠之地 → 西部荒野 → 石爪山脈 → 洛克莫丹 → 索拉丁之牆</b>，共 6 個任務，14 級就能開始、全程不用打怪，難的只有長途跑圖。</p>
+  <div class="stats">
+    <div class="stat"><b>6</b><span>個任務</span></div>
+    <div class="stat"><b>14</b><span>級可開始</span></div>
+    <div class="stat"><b>+3%</b><span>經驗值（3 層）</span></div>
+    <div class="stat"><b>10,945</b><span>任務經驗合計</span></div>
+    <div class="stat"><b id="prog">0/6</b><span>已完成</span></div>
+  </div>
+</section>
+
+<div class="facts">
+  <div class="fact"><h3>睡袋怎麼用</h3><ul>
+    <li>在<b>非休息區</b>（不是主城、旅店）使用，睡袋會鋪在地上，<b>走上去</b>角色就會躺下。</li>
+    <li>每躺 1 分鐘疊 1 層「充分休息」（經驗 +1%），<b>躺滿 3 分鐘 = +3%</b>。</li>
+    <li>躺著時算休息區，會累積<b>休息經驗</b>。冷卻 <b>1 小時</b>。</li>
+    <li>隊友也能躺你的睡袋；離開約 100 碼睡袋會消失，記得疊滿 3 層再走。</li>
+    <li>PvP 標記的玩家不能用沒標記的人放的睡袋，反過來也一樣。</li>
+  </ul></div>
+  <div class="fact"><h3>一起疊的經驗加成</h3><ul>
+    <li><b>營地</b>（皮革製作的營帳等）：可以把睡袋鋪在營地裡，兩邊加成都拿。</li>
+    <li><b>烹飪食物</b>：躺著時可以吃喝，三種加成一次拿滿。</li>
+    <li>任務線中還會拿到 8 個<b>學生綜合堅果</b>：吃了直接補滿生命、回一些法力（永恆版沒有 SoD 的經驗加成）。</li>
+  </ul></div>
+  <div class="fact"><h3>開始前準備</h3><ul>
+    <li>先在貧瘠之地、石爪山脈、希爾斯布萊德拿好飛行點。</li>
+    <li>會經過荊棘谷、西部荒野、阿拉希高地、濕地、洛克莫丹這些高等或聯盟地區，<b>沿著大路走、避開怪</b>，PvP 伺服器小心聯盟玩家。</li>
+    <li>有移動加速最好（鬼狼、獵豹形態、牛頭人的平原奔跑）。</li>
+    <li>順路可以收集<a href="https://www.warcrafttavern.com/forever/guides/library-books/" target="_blank" rel="noopener">圖書館的書</a>；德魯伊水棲形態、薩滿水之圖騰任務的路線也很順。</li>
+  </ul></div>
+</div>
+
+<div class="plan"><h3>什麼時候做？</h3>
+  <b>建議 18–24 級一口氣跑完。</b>越早拿到，剩下的練級時間都有 +3% 經驗；任務本身也有約 1 萬經驗。最遠的一段是從幽暗城一路走到洛克莫丹（聯盟區，有 30 級守衛），等級太低就沿大路、看到守衛繞開。
+  <ol>
+    <li>練級路線在<b>貧瘠之地（12–17 級）</b>時，先去南部 46, 74 接第一個任務。</li>
+    <li>有空檔時從奧格瑪搭飛艇到格羅姆高營地，往北走到西部荒野交任務（或棘齒城搭船到藏寶海灣）。</li>
+    <li>回卡林多做<b>石爪山脈</b>那兩步（剛好和練級路線 18–22 級的石爪山脈重疊）。</li>
+    <li>從幽暗城一路往南、往東走到洛克莫丹，再回頭到索拉丁之牆完成。</li>
+  </ol>
+  不想跑太遠也可以拆開：洛克莫丹、索拉丁之牆這兩步留到 30 級左右做阿拉希高地／希爾斯布萊德的時候順路完成，只是加成比較晚才拿到。
+</div>
+
+<div class="routebar" id="routebar"></div>
+
+<div class="steps" id="steps"></div>
+
+<footer>攻略內容整理自 <a href="https://www.warcrafttavern.com/forever/guides/cozy-sleeping-bag/" target="_blank" rel="noopener">Warcraft Tavern：Cozy Sleeping Bag Guide（WoW Forever）</a>，那裡有每個地點的實景截圖。任務等級、經驗取自 forever.warcraftdb.com，繁中名稱取自 Wowhead 永恆台服。勾選只存在這台裝置的瀏覽器。</footer>
+</div>
+<script>
+const STEPS = [
+  { id: 1, zone: "貧瘠之地（南部）", en: "The Barrens", spot: "燒焦的遺骸", spotEn: "Burned-Out Remains", coord: "46, 74", note: "南部一座燒毀的塔",
+    qs: [{ a: "in", zh: "…你找到的紙條", en: "...and that note you found", id: 79007, lv: 22, min: 14, xp: 1750 }],
+    travel: "從十字路口沿大路往南，經過陶拉祖營地附近，找到燒毀的高塔廢墟，點地上的「燒焦的遺骸」。" },
+  { id: 2, zone: "西部荒野", en: "Westfall", spot: "上釘的木板", spotEn: "Nailed Plank", coord: "37, 50", note: "東邊的亞歷克斯頓農場",
+    qs: [{ a: "out", zh: "…你找到的紙條", id: 79007, rw: "迅捷藥水、次級食人妖之血藥劑" }, { a: "in", zh: "墊腳石", en: "Stepping Stones", id: 79192, lv: 24, min: 14, xp: 1950 }],
+    travel: "兩種走法：① 奧格瑪外的飛艇塔搭飛艇到荊棘谷格羅姆高營地（離西部荒野比較近）；② 棘齒城搭船到藏寶海灣（要多走一段荊棘谷）。到荊棘谷後沿大路一直往北走到西部荒野。",
+    warn: "西部荒野是聯盟地區，PvP 伺服器小心衛兵和聯盟玩家。" },
+  { id: 3, zone: "石爪山脈", en: "Stonetalon Mountains", spot: "口袋垃圾", spotEn: "Pocket Litter", coord: "烈日石居附近山坡", note: "烈日石居附近山坡小徑上去的營地",
+    qs: [{ a: "out", zh: "墊腳石", id: 79192, rw: "燧石和火絨、普通木柴 ×3、結實的飯盒、礦工鋤或農夫的鐵鏟（二選一）" },
+         { a: "opt", zh: "Rekindle（重新點燃營火，選做）", id: 0, txt: "用剛拿到的燧石和火絨＋普通木柴，點旁邊的營火就完成。" },
+         { a: "in", zh: "匆匆忙忙", en: "Scramble", id: 79980, lv: 24, min: 14, xp: 195 }],
+    travel: "回卡林多（爐石、傳送或原路回去），從貧瘠之地、梣谷或莫高雷都能進石爪山脈。在烈日石居附近找往山坡上的小徑，上面有一個小營地。" },
+  { id: 4, zone: "石爪山脈", en: "Stonetalon Mountains", spot: "一堆泥土", spotEn: "Mound of Dirt", coord: "營地往東一點", note: "山坡側面的土堆",
+    qs: [{ a: "out", zh: "匆匆忙忙", id: 79980, rw: "學生綜合堅果 ×3、火焰之箭 ×200、爆破彈藥 ×200、銀星／夜視步槍／精確之弓（三選一）" },
+         { a: "in", zh: "濕身秀", en: "Wet Job", id: 79974, lv: 32, min: 14, xp: 2550 }],
+    travel: "從剛才的營地往東走一小段，山坡側面有一堆泥土。" },
+  { id: 5, zone: "洛克莫丹", en: "Loch Modan", spot: "雕紋刻像", spotEn: "Carved Figurine", coord: "49, 12", note: "北邊石工壩上的突出平台",
+    qs: [{ a: "out", zh: "濕身秀", id: 79974, rw: "桃木管、美味淡蘭姆酒" }, { a: "in", zh: "鷹之拳", en: "Eagle's Fist", id: 79975, lv: 32, min: 14, xp: 2550 }],
+    travel: "部落最遠的一段：奧格瑪外搭飛艇到幽暗城 → 往南穿過銀松森林 → 東南進希爾斯布萊德丘陵 → 往東進阿拉希高地 → 從南邊的橋進濕地 → 沿路往南到洛克莫丹。到洛克莫丹北邊的石工壩，要<b>跳到壩上的突出平台</b>才找得到雕紋刻像。",
+    warn: "阿拉希高地是 30–40 級地區、洛克莫丹附近有 30 級衛兵，等級低就走大路、看到衛兵繞開。整條任務線這段最難。" },
+  { id: 6, zone: "索拉丁之牆（希爾斯布萊德／阿拉希交界）", en: "Thoradin's Wall", spot: "信差包、匆忙收拾的背袋", spotEn: "Messenger Bag / Hastily Rolled-Up Satchel", coord: "城牆北段", note: "斜靠在牆缺口的推車旁",
+    qs: [{ a: "out", zh: "鷹之拳", id: 79975, txt: "點牆上掛著的「信差包」交任務，同一個信差包接下一個任務。" },
+         { a: "in", zh: "必是此地", en: "This Must Be The Place", id: 79976, lv: 32, min: 14, xp: 1950 },
+         { a: "out", zh: "必是此地", id: 79976, txt: "點信差包下面的「匆忙收拾的背袋」交任務。", rw: "<b>舒適的睡袋</b>、學生綜合堅果 ×5" }],
+    travel: "從洛克莫丹往北走回濕地、阿拉希高地，到索拉丁之牆從城門進希爾斯布萊德那一側。找北段一台斜靠在牆缺口的推車，<b>跳上推車再爬上城牆頂</b>，沿牆頂走到一個平台，牆上掛著信差包。" },
+];
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const store = { get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
+(function theme() {
+  const btn = document.getElementById("themeBtn"); const cur = store.get("wowf-theme", null); if (cur) document.documentElement.dataset.theme = cur;
+  const isDark = () => (document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark")) === "dark";
+  const paint = () => { btn.textContent = isDark() ? "☀" : "☾"; };
+  btn.addEventListener("click", () => { const now = isDark() ? "light" : "dark"; document.documentElement.dataset.theme = now; store.set("wowf-theme", now); paint(); }); paint();
+})();
+function navCls(c) { document.querySelectorAll('a[href]').forEach(a => { const h = a.getAttribute("href"), b = h.split("#")[0]; if (/^(leveling|gear|talents)\.html$/.test(b)) a.setAttribute("href", b + (c ? "#" + c : "")); }); }
+navCls(store.get("wowf-class", ""));
+let done = store.get("wowf-bag-done", {});
+const qlink = (id, t) => id ? `<a href="https://www.wowhead.com/forever/tw/quest=${id}" target="_blank" rel="noopener">${esc(t)}</a>` : esc(t);
+function render() {
+  document.getElementById("routebar").innerHTML = STEPS.map((s, i) => `${i ? "<span>→</span>" : ""}<a href="#b${s.id}" class="${done[s.id] ? "done" : ""}">${s.id}. ${esc(s.zone.replace(/（.*）/, ""))}</a>`).join("");
+  document.getElementById("steps").innerHTML = STEPS.map(s => `<section class="bstep${done[s.id] ? " done" : ""}" id="b${s.id}">
+    <span class="num">${s.id}</span><input class="tick" type="checkbox" data-s="${s.id}" ${done[s.id] ? "checked" : ""} aria-label="完成第 ${s.id} 步">
+    <h3>${esc(s.zone)}<small>${esc(s.en)}</small></h3>
+    <div class="where">點地上的 <b>${esc(s.spot)}</b>（${esc(s.spotEn)}）<span class="coord">${esc(s.coord)}</span>　${esc(s.note)}</div>
+    <div class="qbox">${s.qs.map(q => `<div class="qb"><span class="act ${q.a}">${q.a === "in" ? "接任務" : q.a === "out" ? "交任務" : "選做"}</span><span class="qt">${q.id ? qlink(q.id, q.zh) : esc(q.zh)}${q.en ? `<i>${esc(q.en)}</i>` : ""}</span>
+      ${q.lv ? `<div>任務等級 ${q.lv}・${q.min} 級可接・經驗 ${q.xp.toLocaleString()}</div>` : ""}${q.rw ? `<div class="rw">獎勵：${q.rw}</div>` : ""}${q.txt ? `<div>${esc(q.txt)}</div>` : ""}</div>`).join("")}</div>
+    <div class="travel">${s.travel}</div>${s.warn ? `<div class="warn2">${esc(s.warn)}</div>` : ""}
+  </section>`).join("");
+  document.getElementById("prog").textContent = `${STEPS.filter(s => done[s.id]).length}/6`;
+}
+document.getElementById("steps").addEventListener("change", e => { const t = e.target.closest("[data-s]"); if (!t) return; if (t.checked) done[t.dataset.s] = 1; else delete done[t.dataset.s]; store.set("wowf-bag-done", done); render(); });
+render();
+</script>
+</body>
+</html>
